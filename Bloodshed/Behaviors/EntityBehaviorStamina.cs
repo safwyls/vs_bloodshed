@@ -21,13 +21,28 @@ namespace Bloodshed.Behaviors
         public event OnFatiguedDelegate OnFatigued = (ftg, ftgSource) => ftg;
 
         private float timeSinceLastUpdate;
+
+        #region Config props
         private static bool DebugMode => Bloodshed.Config.DebugMode; // Debug mode for logging
         private static float DefenseFatigue => Bloodshed.Config.DefenseStaminaCost; // Fatigue from blocking
         private static float SwimFatigue => Bloodshed.Config.SwimStaminaCost; // Fatigue from swimming
         private static float SprintFatigue => Bloodshed.Config.SprintStaminaCost; // Fatigue from running 
-        private static float WalkSpeedReductionHalfStamina => Bloodshed.Config.WalkSpeedReductionHalfStamina; // Walk speed reduction when below 50% stamina
-        private static float WalkSpeedReductionExhausted => Bloodshed.Config.WalkSpeedReductionExhausted; // Walk speed reduction when exhausted
+        
+        private static float WalkSpeedHalfStamina => Bloodshed.Config.WalkSpeedHalfStamina; // Walk speed reduction when below 50% stamina
+        private static float MeleeAttackDamageHalfStamina => Bloodshed.Config.MeleeAttackDamageHalfStamina; // Attack damage reduction when below 50% stamina
+        private static float MeleeAttackSpeedHalfStamina => Bloodshed.Config.MeleeAttackSpeedHalfStamina; // Attack damage reduction when below 50% stamina
+        private static float RangedAttackDamageHalfStamina => Bloodshed.Config.MeleeAttackDamageHalfStamina; // Attack damage reduction when below 50% stamina
+        private static float RangedAttackSpeedHalfStamina => Bloodshed.Config.RangedAttackSpeedHalfStamina; // Attack damage reduction when below 50% stamina
+        private static float RangedAttackAccuracyHalfStamina => Bloodshed.Config.RangedAttackAccuracyHalfStamina; // Attack damage reduction when below 50% stamina
 
+        private static float WalkSpeedExhausted => Bloodshed.Config.WalkSpeedExhausted; // Walk speed reduction when exhausted
+        private static float MeleeAttackDamageExhausted => Bloodshed.Config.MeleeAttackDamageExhausted; // Attack damage reduction when exhausted
+        private static float MeleeAttackSpeedExhausted => Bloodshed.Config.MeleeAttackSpeedExhausted; // Attack damage reduction when exhausted
+        private static float RangedAttackDamageExhausted => Bloodshed.Config.MeleeAttackDamageExhausted; // Attack damage reduction when exhausted
+        private static float RangedAttackSpeedExhausted => Bloodshed.Config.RangedAttackSpeedExhausted; // Attack damage reduction when exhausted
+        private static float RangedAttackAccuracyExhausted => Bloodshed.Config.RangedAttackAccuracyExhausted; // Attack damage reduction when exhausted
+        #endregion
+        
         private ITreeAttribute StaminaTree
         {
             get
@@ -150,17 +165,32 @@ namespace Bloodshed.Behaviors
                     bool activelyFatiguing = false;
 
                     // --- Low stamina effects ---
-                    if (stamina < maxStamina * 0.5f)
+                    if (stamina < maxStamina * 0.1f)
                     {
-                        plr.Stats.Set("walkspeed", $"{Bloodshed.ModId}:walkspeed", -WalkSpeedReductionHalfStamina, true); // Player moves slower when low on stamina
+                        plr.Stats.Set("walkspeed", $"{Bloodshed.ModId}:walkspeed", WalkSpeedExhausted - 1f); // Player moves even slower when exhausted                        
+                        plr.Stats.Set("meleeWeaponsDamage", $"{Bloodshed.ModId}:meleeWeaponsDamage", MeleeAttackDamageExhausted - 1f); // Player does even less damage when exhausted
+                        plr.Stats.Set("meleeWeaponsAttackSpeed", $"{Bloodshed.ModId}:meleeWeaponsAttackSpeed", MeleeAttackSpeedExhausted - 1f); // Player attacks even slower when exhausted
+                        plr.Stats.Set("rangedWeaponsDamage", $"{Bloodshed.ModId}:rangedWeaponsDamage", RangedAttackDamageExhausted - 1f); // Player does even less damage when exhausted
+                        plr.Stats.Set("rangedWeaponsAttackSpeed", $"{Bloodshed.ModId}:rangedWeaponsAttackSpeed", RangedAttackSpeedExhausted - 1f); // Player attacks even slower when exhausted
+                        plr.Stats.Set("rangedWeaponsAccuracy", $"{Bloodshed.ModId}:rangedWeaponsAccuracy", RangedAttackAccuracyExhausted - 1f); // Player does even less damage when exhausted
                     }
-                    else if (stamina < maxStamina * 0.1f)
+                    else if (stamina < maxStamina * 0.5f)
                     {
-                        plr.Stats.Set("walkspeed", $"{Bloodshed.ModId}:walkspeed", -WalkSpeedReductionExhausted, true); // Player moves even slower when exhausted
+                        plr.Stats.Set("walkspeed", $"{Bloodshed.ModId}:walkspeed", WalkSpeedHalfStamina - 1f); // Player moves slower when low on stamina
+                        plr.Stats.Set("meleeWeaponsDamage", $"{Bloodshed.ModId}:meleeWeaponsDamage", MeleeAttackDamageHalfStamina - 1f); // Player does less damage when low on stamina
+                        plr.Stats.Set("meleeWeaponsAttackSpeed", $"{Bloodshed.ModId}:meleeWeaponsAttackSpeed", MeleeAttackSpeedHalfStamina - 1f); // Player attacks slower when low on stamina
+                        plr.Stats.Set("rangedWeaponsDamage", $"{Bloodshed.ModId}:rangedWeaponsDamage", RangedAttackDamageHalfStamina - 1f); // Player does less damage when low on stamina
+                        plr.Stats.Set("rangedWeaponsAttackSpeed", $"{Bloodshed.ModId}:rangedWeaponsAttackSpeed", RangedAttackSpeedHalfStamina - 1f); // Player attacks slower when low on stamina
+                        plr.Stats.Set("rangedWeaponsAccuracy", $"{Bloodshed.ModId}:rangedWeaponsAccuracy", RangedAttackAccuracyHalfStamina - 1f); // Player does less damage when low on stamina
                     }
                     else
                     {
                         plr.Stats.Remove("walkspeed", $"{Bloodshed.ModId}:walkspeed"); // Player moves normally
+                        plr.Stats.Remove("meleeWeaponsDamage", $"{Bloodshed.ModId}:meleeWeaponsDamage"); // Player does normal damage
+                        plr.Stats.Remove("meleeWeaponsAttackSpeed", $"{Bloodshed.ModId}:meleeWeaponsAttackSpeed"); // Player attacks normally
+                        plr.Stats.Remove("rangedWeaponsDamage", $"{Bloodshed.ModId}:rangedWeaponsDamage"); // Player does normal damage
+                        plr.Stats.Remove("rangedWeaponsAttackSpeed", $"{Bloodshed.ModId}:rangedWeaponsAttackSpeed"); // Player attacks normally
+                        plr.Stats.Remove("rangedWeaponsAccuracy", $"{Bloodshed.ModId}:rangedWeaponsAccuracy"); // Player does normal damage
                     }
 
                     // --- Fatiguing actions ---

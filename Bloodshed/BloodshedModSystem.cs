@@ -1,6 +1,5 @@
 ﻿using Bloodshed.Behaviors;
 using Bloodshed.Config;
-using Bloodshed.Items;
 using Bloodshed.Systems;
 using System;
 using Vintagestory.API.Client;
@@ -29,7 +28,6 @@ namespace Bloodshed
         {
             Instance = this;
             Api = api;
-            api.RegisterItemClass(ModId + ":itemspearchargeable", typeof(ItemSpearChargeable));
             api.RegisterEntityBehaviorClass(ModId + ":stamina", typeof(EntityBehaviorStamina));
 
             defenseSystem = new DefenseSystem(api);
