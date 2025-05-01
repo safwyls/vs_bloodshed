@@ -76,7 +76,7 @@ namespace Bloodshed.Config
             // Wait for other changes to process
             Bloodshed.Api.Event.RegisterCallback(_ => {
                 // Reload the config
-                Bloodshed.ReloadConfig(Bloodshed.Api);
+                Bloodshed.ReloadConfig(Bloodshed.Api, true);
 
                 // Wait some more to remove this change from the queue since the reload triggers another write
                 Bloodshed.Api.Event.RegisterCallback(_ => {

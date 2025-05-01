@@ -1,12 +1,28 @@
 {
+  "Version": "0.5.0",
+
   "EnableStamina": true,
   "MaxStamina": 100.0,
-  "StaminaRegenSpeed": 1,
-
+  "StaminaRegenSpeed": 1.0,
+  
   "SaturationCostPerStamina": 0.5,
   "DefenseStaminaCost": 0.05,
   "SwimStaminaCost": 0.1,
   "SprintStaminaCost": 0.1,
+  
+  "WalkSpeedHalfStamina": 0.875,
+  "MeleeAttackDamageHalfStamina": 0.9,
+  "MeleeAttackSpeedHalfStamina": 0.9,
+  "RangedAttackDamageHalfStamina": 0.9,
+  "RangedAttackSpeedHalfStamina": 0.9,
+  "RangedAttackAccuracyHalfStamina": 0.9,
+  
+  "WalkSpeedExhausted": 0.75,
+  "MeleeAttackDamageExhausted": 0.7,
+  "MeleeAttackSpeedExhausted": 0.7,
+  "RangedAttackDamageExhausted": 0.7,
+  "RangedAttackSpeedExhausted": 0.7,
+  "RangedAttackAccuracyExhausted": 0.7,
   
   "HideStaminaOnFull": true,
   "StaminaCircleScale": 1.0,

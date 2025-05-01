@@ -82,7 +82,7 @@ namespace Bloodshed.Behaviors
 
         public float MaxStamina
         {
-            get => StaminaTree?.GetFloat("maxstamina") ?? 100;
+            get => StaminaTree?.GetFloat("maxstamina") ?? Bloodshed.Config.MaxStamina;
             set
             {
                 StaminaTree.SetFloat("maxstamina", value);
@@ -103,16 +103,24 @@ namespace Bloodshed.Behaviors
                 entity.WatchedAttributes.SetAttribute(AttributeKey, new TreeAttribute());
 
                 Exhausted = typeAttributes["exhausted"].AsBool(false);
-                MaxStamina = typeAttributes["maxstamina"].AsFloat(100);
+                MaxStamina = typeAttributes["maxstamina"].AsFloat(MaxStamina);
                 Stamina = typeAttributes["currentstamina"].AsFloat(MaxStamina);
                 MarkDirty();
             }
             else
             {
                 float maxStamina = staminaTree.GetFloat("maxstamina");
+
                 if (maxStamina == 0)
                 {
-                    MaxStamina = typeAttributes["maxstamina"].AsFloat(100);
+                    MaxStamina = typeAttributes["maxstamina"].AsFloat(MaxStamina);
+                    MarkDirty();
+                }
+
+                // Make sure the max stamina is the same as the one in the config
+                if (maxStamina != Bloodshed.Config.MaxStamina)
+                {
+                    MaxStamina = typeAttributes["maxstamina"].AsFloat(Bloodshed.Config.MaxStamina);
                     MarkDirty();
                 }
             }
@@ -145,12 +153,18 @@ namespace Bloodshed.Behaviors
 
         public override void OnGameTick(float deltaTime)
         {
-            if (entity.World.Side == EnumAppSide.Client) return;
-            if (entity is not EntityPlayer plr) return; // Only players have the stamina behavior             
-            if (plr.Player.WorldData.CurrentGameMode == EnumGameMode.Creative) return; // Only players in survival mode have stamina
-            
             var stamina = Stamina;  // higher performance to read this TreeAttribute only once
             var maxStamina = MaxStamina;
+
+            if (entity.World.Side == EnumAppSide.Client) return;
+            if (entity is not EntityPlayer plr) return; // Only players have the stamina behavior
+            
+            // Only players in survival mode have stamina
+            if (plr.Player.WorldData.CurrentGameMode == EnumGameMode.Creative) 
+            {
+                Stamina = maxStamina; 
+                return;
+            }
 
             timeSinceLastUpdate += deltaTime;
 
@@ -296,10 +310,10 @@ namespace Bloodshed.Behaviors
             if (fatigue > 5f)
             {
                 // ToDo: Find suitable animation for stagger
-                entity.AnimManager.StartAnimation("hurt");
+                //entity.AnimManager.StartAnimation("hurt");
 
                 // ToDo: Find suitable sound for fatigue
-                entity.PlayEntitySound("hurt");
+                //entity.PlayEntitySound("hurt");
             }
         }
 

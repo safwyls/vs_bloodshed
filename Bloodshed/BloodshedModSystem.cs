@@ -2,6 +2,7 @@
 using Bloodshed.Config;
 using Bloodshed.Systems;
 using System;
+using System.Reflection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -31,7 +32,7 @@ namespace Bloodshed
             api.RegisterEntityBehaviorClass(ModId + ":stamina", typeof(EntityBehaviorStamina));
 
             defenseSystem = new DefenseSystem(api);
-            ReloadConfig(api);
+            ReloadConfig(api, false);
         }
 
         public override void StartServerSide(ICoreServerAPI api)
@@ -59,6 +60,7 @@ namespace Bloodshed
         private void Event_LevelFinalize()
         {
             // Hook server events for damage and fatigue
+            // These are always null??? Not sure why
             var ebh = capi.World.Player.Entity.GetBehavior<EntityBehaviorHealth>();
             if (ebh != null) ebh.onDamaged += (dmg, dmgSource) => defenseSystem.HandleDamaged(capi.World.Player, dmg, dmgSource);
 
@@ -75,25 +77,40 @@ namespace Bloodshed
 
             var ebs = byPlayer.Entity.GetBehavior<EntityBehaviorStamina>();
             if (ebs != null) ebs.OnFatigued += (ftg, ftgSource) => defenseSystem.HandleFatigued(byPlayer, ftg, ftgSource);
+
+            
         }
 
-        public void ReloadConfig(ICoreAPI api)
+        public void ReloadConfig(ICoreAPI api, bool isReload)
         {
             (_fileWatcher ??= new FileWatcher()).Queued = true;
 
             try
             {
+                // Load user config
                 var _config = api.LoadModConfig<BloodshedConfig>($"{ModId}.json");
+
+                // If no user config, create one
                 if (_config == null)
                 {
                     Mod.Logger.Warning("Missing config! Using default.");
                     Config = new BloodshedConfig();
-                    //Config = api.Assets.Get(new AssetLocation("bloodshed:config/default.json")).ToObject<BloodshedConfig>();
-                    api.StoreModConfig(Config, $"{ModId}.json");
                 }
                 else
                 {
                     Config = _config;
+                }
+
+                // Only do this if we are not actively reloading
+                if (isReload)
+                {
+                    // Update stats
+                    // ToDo: Figure out how to update stats on reload
+                }
+                else 
+                {
+                    // Store config again (to ensure any new props are saved)
+                    api.StoreModConfig(Config, $"{ModId}.json");
                 }
             }
             catch (Exception ex)
