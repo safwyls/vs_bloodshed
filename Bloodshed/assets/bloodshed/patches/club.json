@@ -1,0 +1,25 @@
+[
+	{
+		"file": "game:itemtypes/tool/club",
+		"op": "addmerge",
+		"path": "/attributes",
+		"value": {
+			"bloodshed-defense": {
+				"blockSoundLight": "game:arrow-impact",
+				"blockSoundHeavy": "game:thud",
+				"protectionChance": {
+					"passive": 0.05,
+					"active": 1
+				},
+				"damageAbsorptionByType": {
+					"*-wood": 1,
+					"*-scrap": 1.5,
+					"*-ruined": 0.5
+				},
+				"vertProtectionRange": 90,
+				"horizProtectionRange": 60
+			}
+		}
+	}
+
+]

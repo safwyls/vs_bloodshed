@@ -1,0 +1,38 @@
+[
+	{
+		"file": "game:itemtypes/tool/blade",
+		"op": "addmerge",
+		"path": "/attributes",
+		"value": {
+			"bloodshed-defense": {
+				"blockSoundLight": "game:tool/slash",
+				"blockSoundHeavy": "game:effect/anvilmergehit",
+				"protectionChanceByType": {
+					"blade-falx-*": {
+						"passive": 0.1,
+						"active": 1
+					},
+					"*": {
+						"passive": 0.05,
+						"active": 1
+					}
+				},
+				"damageAbsorptionByType": {
+					"*-ruined": 2,
+					"*-copper": 3,
+					"*-tinbronze": 4,
+					"*-bismuthbronze": 4.5,
+					"*-blackbronze": 5,
+					"*-iron": 5.5,
+					"*-meteoriciron": 6,
+					"*-steel": 6.5,
+					"*-gold": 6.5,
+					"*-silver": 6.5
+				},
+				"vertProtectionRange": 60,
+				"horizProtectionRange": 60
+			}
+		}
+	}
+
+]

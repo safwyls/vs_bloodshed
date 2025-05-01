@@ -1,0 +1,32 @@
+[
+	{
+		"file": "game:itemtypes/tool/knife",
+		"op": "addmerge",
+		"path": "/attributes",
+		"value": {
+			"bloodshed-defense": {				
+				"blockSoundLight": "game:tool/slash",
+				"blockSoundHeavy": "game:effect/anvilmergehit",
+				"protectionChance": {
+					"passive": 0,
+					"active": 0.5
+				},
+				"damageAbsorptionByType": {
+					"knife-generic-copper": 1,
+					"knife-generic-tinbronze": 1.5,
+					"knife-generic-bismuthbronze": 1.5,
+					"knife-generic-blackbronze": 1.75,
+					"knife-generic-iron": 2,
+					"knife-generic-meteoriciron": 2.25,
+					"knife-generic-steel": 2.5,
+					"knife-generic-gold": 2.5,
+					"knife-generic-silver": 2.5,
+                    "knife-*-ruined": 0.5
+				},
+				"vertProtectionRange": 30,
+				"horizProtectionRange": 30
+			}
+		}
+	}
+
+]

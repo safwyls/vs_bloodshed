@@ -1,0 +1,17 @@
+{
+  "EnableStamina": true,
+  "MaxStamina": 100.0,
+  "StaminaRegenSpeed": 1,
+
+  "SaturationCostPerStamina": 0.5,
+  "DefenseStaminaCost": 0.05,
+  "SwimStaminaCost": 0.1,
+  "SprintStaminaCost": 0.1,
+  
+  "HideStaminaOnFull": true,
+  "StaminaCircleScale": 1.0,
+  "StaminaCircleInnerRadius": 0.6,
+  "StaminaCircleOuterRadius": 0.8,
+  
+  "DebugMode": false
+}

@@ -1,0 +1,8 @@
+{
+    "game:tabname-bloodshed": "Bloodshed",
+
+    "fatiguebreakthrough": "Player fatigued, block unsuccessful",
+
+    "clienthello": "Bloodshed client side loaded",
+    "serverhello": "Bloodshed server side loaded"
+}
